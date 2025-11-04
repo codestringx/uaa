@@ -1,0 +1,131 @@
+spring_profiles: postgresql
+
+database:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://${DATABASE_HOST:host.docker.internal}:${DATABASE_PORT:5432}/${DATABASE_NAME:uaa}
+  username: ${DATABASE_USERNAME:uaauser}
+  password: ${DATABASE_PASSWORD:uaapassword}
+  maxactive: 100
+  maxidle: 10
+  removeabandoned: false
+  abandonedtimeout: 300
+  logabandoned: true
+
+login:
+  entityID: uaa-local
+  saml:
+    activeKeyId: key1
+    keys:
+      key1:
+        key: |
+          -----BEGIN PRIVATE KEY-----
+          MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC99xTwxXLJcZOC
+          vM0DckhGTEY7bPpjQTCUHdLUPsnPd60RnN4SdbNInKpCO+7ae69HmMUze6eLmp/K
+          g8YE7slBBqfK0SQk/r0HpPLdtkLaS7kZiUgmaILPdFKWBjxEsOn4oqf1ftuT45k/
+          5Od8fPeJYpbeTm/rTIPgoFEZlDvXXkMNmLi/+DgmEowxXSSj2ZWrM/LUnnwqwZdT
+          EHLc1dKD5ffc06jnfLmmDsK8ab0PzU/AU/A2OQbDktuV/a+lEVpcQiSImHMbV+Nk
+          FNo8ZcjvJW//4wz/u5FxqaNBF0gfIlI6zrNCyoxthRhQRL9HVc24aZAP3IBtiNZX
+          RZp4b7afAgMBAAECggEABmZsri/4zhClh6IUxijzhmrLcvUY+n8Xw+W9VKlI41SE
+          4DMIyFZu0+NzWQfr5DCGl0LuYe2ol2t+NrR513C0FxzCSnMBZL2wYLGN/SpG1lP2
+          yIV3iNO8lIC2x5cuMKJFP7s7LWo4u6LPZvevVOJg9J/9tT+vRZ4uU0MTeGkmGvtj
+          JmLbVO2CBxqq3r1T2L1/7KBBo6GNj53Hdgp/S3SWu+tm2atwe35gj41ZBE+qDkEh
+          iN2wXiYX0/vU2zlAlMTdVgqgQtchrccZS+jGjgEFVprtjq9PftDqT18LqtT0StZy
+          BY2NIKI7CBnXAeEYkfteRq++iD5KpLxU3UQHOWekAQKBgQDnh1qYkXgXuElXLJxa
+          ETnBC8aQ8GSrlqonT9EFO1s6sn6Z7WYYDMaGHqXojzKpmVojeaZqSSYNGnBkbyWU
+          xRBUU8ucIL11U3osTqhjkShYxVnjdGKlxtwJ0Ffd9wenmKVcDb/aAjKIdYZMHFU6
+          i5noLO/L5YlvvYlgylNWK6sRzwKBgQDSCxyJBKn8pdJA6dTlsgElEmu6e/i/v0xq
+          ASpnYBngG1vqVTEGxnAqfmBwPsJlU8L3LMv9Ih9EjOJeN8JUnJcKVXPycEYPwyNj
+          QbSGlBnN40WATMrRLbHzMO4sBzTUfdKouhfQL/j7Wb/UHpceWPVfvcrIzfBpYUax
+          p73N33NSMQKBgQC5j1zHvIcAk72L9YAWG4orMzHgxhoY/7a9rRW72LekUpxu57qU
+          eeC+a1/TBLm4/eQlXIFI2/l4NQFxLTd0hYAx5brhFchieRYI3r3MlvE8PGdvib7q
+          WHfQEb/qcOscopWdMpPZuTsg7PhGlcqlEm+2ihViWEQPX1v0TBQAkx0XNwKBgHwa
+          OJf0e4NdbmcQQcwdanO++IvMp+KTYtDXM3i03VT+lUZVY4w/PxK8bLqlOjKoVO+6
+          NiSwPo1AOJe2lklr5AolB0bdc2fowkXpEoLZio2NlQkDVmpVd2jbJj45W8uZNBih
+          K2TEk3XfR2pLULqLkR8qgmA23a9F3IEnPQwg1IBhAoGAbaWX8mkOF3+sqOmKaBEH
+          ey7/2OtWWFjVyVlGJ5v4DK1Nm3aZYEhzB1jtBOT0WjC59WUqgD9MCoBXU5Bj15Wd
+          IHSFau9FGLFNECwTe/WwrpTEv3ul56C254TTJn/7GaGGxSKlO3tpmsVWpNcPkvn8
+          Triw+kjULR7C9P0PnMsnvCk=
+          -----END PRIVATE KEY-----
+        certificate: |
+          -----BEGIN CERTIFICATE-----
+          MIIDzzCCAregAwIBAgIUDrCHCLyKkY+JkWGQlg4LRKXZlPowDQYJKoZIhvcNAQEL
+          BQAwdzERMA8GA1UECAwIVmlyZ2luaWExEDAOBgNVBAcMB0hlbnJpY28xGzAZBgNV
+          BAoMEkVsZXBoYW50IEluc3VyYW5jZTEcMBoGA1UECwwTRGlnaXRhbCBEZXZlbG9w
+          bWVudDEVMBMGA1UEAwwMZWxlcGhhbnQuY29tMB4XDTI1MTEwNDE4NTQyNVoXDTI2
+          MTEwNDE4NTQyNVowdzERMA8GA1UECAwIVmlyZ2luaWExEDAOBgNVBAcMB0hlbnJp
+          Y28xGzAZBgNVBAoMEkVsZXBoYW50IEluc3VyYW5jZTEcMBoGA1UECwwTRGlnaXRh
+          bCBEZXZlbG9wbWVudDEVMBMGA1UEAwwMZWxlcGhhbnQuY29tMIIBIjANBgkqhkiG
+          9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvfcU8MVyyXGTgrzNA3JIRkxGO2z6Y0EwlB3S
+          1D7Jz3etEZzeEnWzSJyqQjvu2nuvR5jFM3uni5qfyoPGBO7JQQanytEkJP69B6Ty
+          3bZC2ku5GYlIJmiCz3RSlgY8RLDp+KKn9X7bk+OZP+TnfHz3iWKW3k5v60yD4KBR
+          GZQ7115DDZi4v/g4JhKMMV0ko9mVqzPy1J58KsGXUxBy3NXSg+X33NOo53y5pg7C
+          vGm9D81PwFPwNjkGw5Lblf2vpRFaXEIkiJhzG1fjZBTaPGXI7yVv/+MM/7uRcamj
+          QRdIHyJSOs6zQsqMbYUYUES/R1XNuGmQD9yAbYjWV0WaeG+2nwIDAQABo1MwUTAd
+          BgNVHQ4EFgQUzP/6ubD1qck3lLGqFfEpWc5jn1QwHwYDVR0jBBgwFoAUzP/6ubD1
+          qck3lLGqFfEpWc5jn1QwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOC
+          AQEAOKiBSOBzXzw1VcGtiS1sPH9k7wwfrk3qFlfWbCfRg4PJ3wSfKX8dmbvq8omp
+          Ru1mmsrnLG3jY4DBGYpXQNNxtKZ1MWXHTYGLSMIenYnfafZ2qIcdjVg3pQrNHt4Q
+          NmVo2OfBRYyuMJf0lJA975gCqTG3M4F6N2h//eyAsnjYXRiWTmZxUd+cbREhEOmo
+          Lg8MOvZQNAVkVRPB/74BokxzdM+cjRZlVGJJg5MJiW/sPo1RetSMBO8qvlApZW6J
+          uDuQBj4m+/uXQfu7us3apptjLiemNMKYIbqHYiVRFFRW4lOJ4kUzwaP0crNvD7ob
+          ZzrPWbBERQOAvqY1Jzj78OkXjA==
+          -----END CERTIFICATE-----
+    providers: {}
+
+oauth:
+  clients:
+    admin:
+      id: admin
+      secret: adminsecret
+      authorized-grant-types: client_credentials
+      authorities: clients.read,clients.write,clients.secret,uaa.admin,scim.read,scim.write,password.write
+      scope: uaa.none
+
+scim:
+  users:
+    - admin|admin|admin@test.org|Admin|User|uaa.admin,scim.write,scim.read,clients.read,clients.write,clients.secret,password.write
+  groups:
+    uaa.admin: Read + write + manage access to UAA
+    uaa.user: Access own account
+
+jwt:
+  token:
+    signing-key: |
+      -----BEGIN PRIVATE KEY-----
+      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCoexRCM+ryltEj
+      nFoP2nV6CuKc9xPScV+B4vZ9NIFAvVgTxxLcXVS0vYu4DQ9u6FJajCPyaQFq7n31
+      bD1OTCquq90FIyAG7HoMZiHzYejFobMdy5ugqLEAAlHYrmE+ad2oXt8fY5DHim/E
+      /J3QfKqGXLbMN3xYFT1xRXQaaKKHWpLy+R9wBM8fXgNRe5lvFzU7PqX/0Yo5MKTt
+      q53wwryEL3nWQ2h+hPf/Kn2XTIycwdWSF7ffpxGHNF5eve8WLmj2Z2UoB/SbQKfh
+      AQxNdTx3ift6ZiaL+Ff0u/qLVHpPBAhydBQ6nDoon+pQvhVZZvZmd1U9RYcK/Xbi
+      MiOHQWutAgMBAAECggEAHL3seZPKUcq9UHYonho+XszTFoSHDuhU6v9ZXggyQaVb
+      jHoyY0IPxIqudn5R4vGCtRxBuKXFvmSDu/XUapJPWL+Mg8cXfF7kvk9BHPhXwblh
+      aWSV/t0wXuhGZrDu+XsNe579sOjnJsdc5G3VDV9rJuNTsviHP66V7ggzc5rkmTLp
+      BN3HURtWJmH2q3WuyHsgvyJ7wPFNeVIWsmTL0GRGrY/mFXvhVzin6CF3nCt32iOj
+      IATqBaHHo2+96oiG8omjAALdKWYJB1q61hievq/bggnI0fRKMLab+ePUP4gXBq5f
+      gTTrGeiyRZQpiuln8asNDgpNPCsSIo1pbpq/xVVReQKBgQDjo+3RooVOEJGA+dRo
+      PrxPz6YGtJNQqDLGziI9RAS8hmn3/NGrF08fG6KeLNJPNTNdRt0wKOZ4dJ9EUbKb
+      pWm8/hNlPQ1JGc0DSudJ4p8zy3HhDfvdw+j0JL2dlyXz1hmj1WfFL3ppFgefh5us
+      r3vEGlmudivWZ+lK6xJgfFKKdQKBgQC9eGPoS3/mIka9mlnpxgPqK9aneFO122VO
+      i3D8rVAEDy7uBpN9NSgMbK8eiRhtR+DHylxJLgBd+Bk050gkZtt/7dI/NkpTjCCk
+      CPkGfYeQudlPXOHly6GI4jIkhq2VEarRzGha//xS1olEwZdCGM5J+hyUl5HNrgFs
+      vH8doQ8FWQKBgFWu8mkh30NPATWm08iZNJBl/Hwxo/GMHfCuzjx5Sb8caO6q/tCD
+      aYiwAjm/bTnbMIY/kin6eyWD4B77EVt8m5xDllFY9ZM6XuyKWRx6bKo2PZsUhGUo
+      xJqA6c5TgjmRsPz16qVSBaVgYWYuyO3q748UzATa/g0p96n3aWdf5EGxAoGBAJxK
+      Lr9zZ/FB3PCR3hFEUf5cYxiJ3SNp8sszouQLYrG2hJO7wPXLX1nAXUPm+stKO1US
+      y8VhuNPKz6AgGBZO8kk4t/GEqxL3yAUHkcOU0LrFU0hv6bdQndL4IzyWC6GnjSy6
+      XGqUNmNurJSWzFqtc5z6P5Ei5havrmUvp/uc23MhAoGAAlAQHJbWCblOz6QxFQSt
+      +X09swqxq+KrB16ExxlimOLsFRp9OhY3BiNHATWy7485Fce6z9VZFlS23o9HPy7q
+      EuBCX6tFqJFhpIBVpEM4aW8P0Y3EnAfvVwrY9AxGsWE78cioLd1vQpqjcT8f12z3
+      DBjr5vTLqt9hTNobEsL5VfY=
+      -----END PRIVATE KEY-----
+    verification-key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqHsUQjPq8pbRI5xaD9p1
+      egrinPcT0nFfgeL2fTSBQL1YE8cS3F1UtL2LuA0PbuhSWowj8mkBau599Ww9Tkwq
+      rqvdBSMgBux6DGYh82HoxaGzHcuboKixAAJR2K5hPmndqF7fH2OQx4pvxPyd0Hyq
+      hly2zDd8WBU9cUV0Gmiih1qS8vkfcATPH14DUXuZbxc1Oz6l/9GKOTCk7aud8MK8
+      hC951kNofoT3/yp9l0yMnMHVkhe336cRhzReXr3vFi5o9mdlKAf0m0Cn4QEMTXU8
+      d4n7emYmi/hX9Lv6i1R6TwQIcnQUOpw6KJ/qUL4VWWb2ZndVPUWHCv124jIjh0Fr
+      rQIDAQAB
+      -----END PUBLIC KEY-----

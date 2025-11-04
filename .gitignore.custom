@@ -1,0 +1,59 @@
+# UAA Custom .gitignore
+# Add this to your .gitignore to protect sensitive data
+
+# Sensitive Configuration
+config/uaa.yml
+.env
+
+# Private Keys and Certificates
+app/saml.key
+app/saml.crt
+app/jwt_key.pem
+app/jwt_key_rsa.pem
+app/jwt_pub.pem
+
+# Backups
+*.backup.*
+backups/
+app.backup.*/
+
+# Database Dumps
+*.sql
+*.sql.gz
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# Build
+build/
+*/build/
+.gradle/
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Docker
+.dockerignore
+
+# Keep these template files (add .template versions)
+!config/uaa.yml.template
+!.env.template

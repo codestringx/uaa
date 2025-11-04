@@ -1,0 +1,162 @@
+================================================================================
+                    UAA DOCKER SETUP - FILES CREATED
+================================================================================
+
+This setup includes the following documentation and automation files:
+
+Ì≥Ñ DOCUMENTATION FILES:
+-----------------------
+
+1. README-UAA-SETUP.md (9.2 KB)
+   - Comprehensive setup guide
+   - Manual and automated key generation steps
+   - Troubleshooting section
+   - Production considerations
+   - OAuth2/OIDC endpoint documentation
+
+2. QUICK-REFERENCE.md (4.3 KB)
+   - Quick command reference
+   - Common operations cheat sheet
+   - Endpoint URLs
+   - Default credentials
+   - Troubleshooting tips
+
+3. README.md (Updated)
+   - Added Docker Quick Start section at the top
+   - Links to detailed setup guide
+
+Ì¥ß AUTOMATION SCRIPTS:
+----------------------
+
+1. generate-uaa-keys.sh (5.8 KB) - Linux/Mac/Git Bash
+   - Generates SAML Service Provider keys
+   - Generates JWT signing keys
+   - Automatically updates config/uaa.yml
+   - Creates backup of original config
+   - Executable: chmod +x already applied
+
+2. generate-uaa-keys.bat (3.5 KB) - Windows CMD
+   - Generates SAML Service Provider keys
+   - Generates JWT signing keys
+   - Provides manual update instructions
+   - Creates config backup
+
+================================================================================
+                            QUICK START GUIDE
+================================================================================
+
+FOR LINUX/MAC/GIT BASH USERS:
+-----------------------------
+1. ./generate-uaa-keys.sh
+2. ./gradlew clean :cloudfoundry-identity-uaa:assemble --no-daemon
+3. docker compose up --build
+4. curl http://localhost:8080/healthz
+
+FOR WINDOWS CMD USERS:
+----------------------
+1. generate-uaa-keys.bat
+2. Manually update config\uaa.yml with generated keys (see script output)
+3. gradlew clean :cloudfoundry-identity-uaa:assemble --no-daemon
+4. docker compose up --build
+5. curl http://localhost:8080/healthz
+
+================================================================================
+                          WHAT THE SCRIPTS DO
+================================================================================
+
+‚úì Generate SAML Service Provider RSA key (2048-bit)
+‚úì Generate SAML Service Provider X.509 certificate (365 days validity)
+‚úì Generate JWT signing RSA private key (2048-bit)
+‚úì Generate JWT verification public key
+‚úì Update config/uaa.yml with all generated keys (Linux/Mac/Git Bash)
+‚úì Create timestamped backup of original config
+
+Generated files:
+  - app/saml.key        (SAML private key)
+  - app/saml.crt        (SAML certificate)
+  - jwt_key.pem            (JWT private key - PKCS#8 format)
+  - jwt_key_rsa.pem        (JWT private key - RSA format for UAA)
+  - jwt_pub.pem            (JWT public key)
+
+================================================================================
+                         WHY THESE KEYS ARE NEEDED
+================================================================================
+
+SAML Keys:
+----------
+UAA requires SAML Service Provider keys even if you're not using SAML
+authentication. This is because SAML components are deeply integrated
+into UAA's architecture and the application creates internal SAML
+metadata during bootstrap.
+
+JWT Keys:
+---------
+Used for signing and verifying OAuth2 access tokens and ID tokens.
+The private key signs tokens, the public key verifies them.
+
+================================================================================
+                           DEFAULT CREDENTIALS
+================================================================================
+
+Admin User:
+  Username: admin
+  Password: admin
+  
+Admin OAuth Client:
+  Client ID: admin
+  Client Secret: adminsecret
+  Grant Types: client_credentials
+
+‚ö†Ô∏è  IMPORTANT: Change these credentials in production!
+
+================================================================================
+                            USEFUL ENDPOINTS
+================================================================================
+
+Health Check:      http://localhost:8080/healthz
+Login Page:        http://localhost:8080/login
+OAuth Token:       http://localhost:8080/oauth/token
+OAuth Authorize:   http://localhost:8080/oauth/authorize
+User Info:         http://localhost:8080/userinfo
+Token Keys:        http://localhost:8080/token_keys
+OIDC Discovery:    http://localhost:8080/.well-known/openid-configuration
+
+================================================================================
+                           TROUBLESHOOTING
+================================================================================
+
+Issue: "Metadata response is missing verification certificates"
+Fix: Run ./generate-uaa-keys.sh and rebuild Docker
+
+Issue: "corrupted stream - out of bounds length found"
+Fix: JWT key is invalid - regenerate with ./generate-uaa-keys.sh
+
+Issue: Database connection refused
+Fix: Ensure PostgreSQL is running and database 'uaa' exists
+
+Issue: Config changes not applied
+Fix: docker compose build --no-cache && docker compose up -d
+
+For more help, see: README-UAA-SETUP.md
+
+================================================================================
+                         NEXT STEPS AFTER SETUP
+================================================================================
+
+1. Test OAuth2 client credentials flow:
+   curl -X POST http://localhost:8080/oauth/token \
+     -u admin:adminsecret \
+     -d grant_type=client_credentials
+
+2. Create additional OAuth clients via SCIM API
+3. Configure LDAP/SAML providers if needed
+4. Review security settings for production deployment
+5. Set up monitoring and logging
+
+================================================================================
+
+For detailed information, see:
+  - README-UAA-SETUP.md   (Complete setup guide)
+  - QUICK-REFERENCE.md    (Command cheat sheet)
+
+================================================================================

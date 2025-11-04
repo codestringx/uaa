@@ -1,0 +1,17 @@
+services:
+  uaa:
+    build: .
+    container_name: uaa-server
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=postgresql
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

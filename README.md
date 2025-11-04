@@ -12,6 +12,32 @@ clients, as well as various other management functions.
 
 [![](https://openid.net/wordpress-content/uploads/2016/04/oid-l-certification-mark-l-rgb-150dpi-90mm-300x157.png)](https://openid.net/certification/)
 
+## 🐳 Docker Setup (Quick Start)
+
+For a complete Docker-based setup guide, see **[uaa-setup/docs/README-UAA-SETUP.md](uaa-setup/docs/README-UAA-SETUP.md)**.
+
+**Quick Start:**
+```bash
+# 1. Generate required keys and certificates
+./uaa-setup/scripts/generate-uaa-keys.sh
+
+# 2. Build UAA
+./gradlew clean :cloudfoundry-identity-uaa:assemble --no-daemon
+
+# 3. Start with Docker
+docker compose up --build
+
+# 4. Verify
+curl http://localhost:8080/healthz
+```
+
+**Prerequisites:** Docker, Docker Compose, OpenSSL, Java 21, PostgreSQL (on host)
+
+**Documentation:**
+- 📖 [Complete Setup Guide](uaa-setup/docs/README-UAA-SETUP.md)
+- ⚡ [Quick Reference](uaa-setup/docs/QUICK-REFERENCE.md)
+- 📑 [Documentation Index](uaa-setup/docs/DOCUMENTATION-INDEX.md)
+
 ## UAA Server
 
 The authentication service is `uaa`. It's a plain Spring MVC webapp.

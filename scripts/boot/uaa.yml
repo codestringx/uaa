@@ -1,3 +1,16 @@
+spring_profiles: postgresql
+
+database:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/uaa
+  username: uaauser
+  password: uaapass
+  maxactive: 100
+  maxidle: 10
+  removeabandoned: false
+  abandonedtimeout: 300
+  logabandoned: true
+
 servlet:
   session-store: database
   session-cookie:

@@ -378,52 +378,8 @@ login:
 #  accountChooserEnabled: true
 #  aliasEntitiesEnabled: true
 
-  # SAML Key Configuration
-  # The location and credentials of the certificate for this SP
-  # See README.md for details on how to create this.
-#  serviceProviderKey: |
-#    -----BEGIN RSA PRIVATE KEY-----
-#    MIICXQIBAAKBgQDHtC5gUXxBKpEqZTLkNvFwNGnNIkggNOwOQVNbpO0WVHIivig5
-#    ...
-#    qy45ptdwJLqLJCeNoR0JUcDNIRhOCuOPND7pcMtX6hI/
-#    -----END RSA PRIVATE KEY-----
-#  serviceProviderKeyPassword: password
-#  serviceProviderCertificate: |
-#    -----BEGIN CERTIFICATE-----
-#    MIIDSTCCArKgAwIBAgIBADANBgkqhkiG9w0BAQQFADB8MQswCQYDVQQGEwJhdzEO
-#    ...
-#    RpuRBwn3Ei+jCRouxTbzKPsuCVB+1sNyxMTXzf0=
-#    -----END CERTIFICATE-----
-
-  # The entity base url is the location of this application
-  # (No longer used for SAML SP metadata generation)
+  # The base url is the location of this application
   entityBaseURL: http://localhost:8080/uaa
-  # The entityID of this SP (SAML SP metadata will declare this as "entityID"); SAML Authn Request will use this as the "Issuer" of the request
-  entityID: cloudfoundry-saml-login
-  saml:
-    # Entity ID Alias to login at /saml/SSO/alias/{login.saml.entityIDAlias};
-    # both SAML SP metadata and SAML Authn Request will include this as part of various SAML URLs (such as the AssertionConsumerService URL);
-    # if not set, UAA will fall back to login.entityID
-    #entityIDAlias: cloudfoundry-saml-login
-    # Default nameID if IDP nameID is not set
-    nameID: 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified'
-    # Default assertionConsumerIndex if IDP value is not set
-    assertionConsumerIndex: 0
-    # Local/SP metadata - sign metadata
-    signMetaData: true
-    # Local/SP metadata - requests signed
-    signRequest: true
-    # Local/SP metadata - want incoming assertions signed
-    wantAssertionSigned: true
-    # Algorithm for SAML signatures. Defaults to SHA256. Accepts SHA1, SHA256, SHA512
-    signatureAlgorithm: SHA256
-    # If true, do not validate the InResponseToField part of an incoming IDP assertion (default: false)
-    disableInResponseToCheck: false
-    socket:
-      # URL metadata fetch - pool timeout
-      connectionManagerTimeout: 10000
-      # URL metadata fetch - read timeout
-      soTimeout: 10000
 #BEGIN SAML PROVIDERS
 #    providers:
 #      okta-signed-or-encrypted:
