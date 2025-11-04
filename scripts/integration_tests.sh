@@ -15,66 +15,80 @@ function main() {
   display_memory
 
   local test_profile="${1:-hsqldb}"
-  local boot="${2:-false}"
-  local skip_boot_run="-Dcargo.tests.run=true"
-  if [[ "${boot:-false}" = 'boot' ]]; then
-    skip_boot_run="-Dcargo.tests.run=false"
-  fi
 
   setup_hosts_file
-  boot_db "${DB}" # DB is set in the Dockerfile for each image
+  boot_db "${DB:-hsqldb}" # DB is set in the Dockerfile for each image
 
   pushd "$(dirname ${script_dir})"
     start_ldap
 
     local wd launch_boot assemble_code integration_test_code
     wd=$(pwd)
-    readonly launch_boot="nohup java -DCLOUDFOUNDRY_CONFIG_PATH=${wd}/scripts/cargo \
-                               -DSECRETS_DIR=${wd}/scripts/cargo \
-                               -Djava.security.egd=file:/dev/./urandom \
-                               -Dmetrics.perRequestMetrics=true \
-                               -Dserver.servlet.context-path=/uaa \
-                               -Dserver.tomcat.basedir=${wd}/scripts/boot/tomcat \
-                               -Dsmtp.host=localhost \
-                               -Dsmtp.port=2525 \
-                               -Dspring.profiles.active=${test_profile} \
-                               -Dstatsd.enabled=true \
-                               -Dfile.encoding=UTF-8 \
-                               -Duser.country=US \
-                               -Duser.language=en \
-                               -Duser.variant -jar ${wd}/uaa/build/libs/cloudfoundry-identity-uaa-0.0.0.war > boot.log 2>&1 &"
+    echo "Setting heap to ${jvm_heap:=1024m}"
+    echo "Setting metaspace to ${jvm_metaspace:=256m}"
+
+    readonly launch_boot="nohup java \
+               -XX:+UseParallelGC \
+               -Xms${jvm_heap} -Xmx${jvm_heap} \
+               -XX:MaxMetaspaceSize=${jvm_metaspace} \
+               -XX:+HeapDumpOnOutOfMemoryError \
+               -XX:HeapDumpPath=${wd} \
+               -DCLOUDFOUNDRY_CONFIG_PATH=${wd}/scripts/boot \
+               -DSECRETS_DIR=${wd}/scripts/boot \
+               -Djava.security.egd=file:/dev/./urandom \
+               -Dmetrics.perRequestMetrics=true \
+               -Dserver.servlet.context-path=/uaa \
+               -Dserver.tomcat.basedir=${wd}/scripts/boot/tomcat \
+               -Dsmtp.host=localhost \
+               -Dsmtp.port=2525 \
+               -Dspring.profiles.active=${test_profile} \
+               -Dstatsd.enabled=true \
+               -Dfile.encoding=UTF-8 \
+               -Duser.country=US \
+               -Duser.language=en \
+               -Duser.variant \
+               -jar ${wd}/uaa/build/libs/cloudfoundry-identity-uaa-0.0.0.war \
+               > boot.log 2>&1 &"
 
     readonly assemble_code="./gradlew '-Dspring.profiles.active=${test_profile}' \
                 '-Djava.security.egd=file:/dev/./urandom' \
                 assemble \
+                --no-daemon \
                 --max-workers=4 \
                 --stacktrace \
                 --console=plain"
 
-    readonly integration_test_code="./gradlew '-Dspring.profiles.active=${test_profile}' '${skip_boot_run}' \
+    readonly integration_test_code="./gradlew \
+                '-Dspring.profiles.active=${test_profile}' \
                 '-Djava.security.egd=file:/dev/./urandom' \
+                '-DskipUaaAutoStart=true' \
                 ${UAA_GRADLE_INT_TEST_COMMAND:-integrationTest} \
                 --stacktrace \
+                --no-daemon \
                 --console=plain"
 
     set -x
-    # The default max heap size for Gradle is 512MB, increase to avoid DaemonDisappearedException
-    export GRADLE_OPTS="-Xmx2048m"
     if [[ "${RUN_TESTS:-true}" = 'true' ]]; then
       eval "$assemble_code"
 
-      if [[ "${boot:-false}" = 'boot' ]]; then
-        eval "$launch_boot"
-        echo $! > boot.pid
-        if is_boot_running ; then
-          echo "Boot started. Can continue to run tests."
-        else
-          echo "Boot did not start - failing"
-          exit 1
-        fi
+      # Always start the boot server before running integration tests
+      eval "$launch_boot"
+      echo $! > boot.pid
+      if is_boot_running ; then
+        echo "Boot started. Can continue to run tests."
+      else
+        echo "Boot did not start - failing"
+        cat boot.log
+        exit 1
       fi
+      
       eval "$integration_test_code"
-      kill -9 "$(cat boot.pid)" || true
+      
+      # Clean up: kill the boot server
+      if [[ -f boot.pid ]]; then
+        kill -9 "$(cat boot.pid)" || true
+        rm boot.pid
+      fi
     else
       echo "$integration_test_code"
       bash
